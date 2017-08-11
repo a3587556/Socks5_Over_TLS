@@ -19,7 +19,8 @@ CMD_CONNECT = 1
 IMPLEMENTED_METHODS = (2, 0)
 
 def _usage():
-    print 'Usage: ./client.py l:port c:host:port'
+    print '''Usage: client.exe l:port c:host:port
+Example: client.exe l:1080 c:12.34.56.78:443'''
 
 class SockV5Server(object):
 
