@@ -5,6 +5,7 @@ from gevent import select
 from gevent.server import StreamServer
 from gevent import socket
 import ssl
+import sys
 
 
 monkey.patch_all()
@@ -17,6 +18,8 @@ ATYP_DOMAINNAME = 3
 CMD_CONNECT = 1
 IMPLEMENTED_METHODS = (2, 0)
 
+def _usage():
+    print 'Usage: ./client.py l:port c:host:port'
 
 class SockV5Server(object):
 
@@ -71,6 +74,7 @@ class SockV5Server(object):
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
         ctx.verify_mode = ssl.CERT_REQUIRED
         ctx.check_hostname = True
+        #ctx.load_verify_locations('your.crt')
         ctx.load_default_certs()
         ssl_server_sock = ctx.wrap_socket(server_sock, server_hostname="your cert domain")
         try:
@@ -86,11 +90,25 @@ class SockV5Server(object):
 
 
 if '__main__' == __name__:
+    arg = sys.argv
+    if len(arg) != 3:
+        _usage()
+        sys.exit(1)
     global dhost
     global dport
     lhost = "127.0.0.1"
-    lport = 1080 # local listen port
-    dhost = "your server ip"
-    dport = 443
+    targv = [sys.argv[1], sys.argv[2]]
+    for i in [0, 1]:
+        s = targv[i].split(":")
+        if len(s) == 2 and (s[0] == "l" or s[0] == "L"): #l:port
+            lport = int(s[1])
+        elif len(s) == 3 and (s[0] == "c" or s[0] == "C"): # c:host:port
+            dhost = s[1]
+            dport = int(s[2])
+        else:
+            _usage()
+            sys.exit(1)
+            
     sock_v5_server = SockV5Server(lhost, lport)
     sock_v5_server.serve_forever()
+    sys.exit(0)
