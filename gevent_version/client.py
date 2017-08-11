@@ -73,10 +73,9 @@ class SockV5Server(object):
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
         ctx.verify_mode = ssl.CERT_REQUIRED
-        ctx.check_hostname = True
-        #ctx.load_verify_locations('your.crt')
+        ctx.check_hostname = False
         ctx.load_default_certs()
-        ssl_server_sock = ctx.wrap_socket(server_sock, server_hostname="your cert domain")
+        ssl_server_sock = ctx.wrap_socket(server_sock)
         try:
             ssl_server_sock.connect((dhost, dport))
             self.piping_client_and_target(client_sock, ssl_server_sock)
@@ -108,7 +107,7 @@ if '__main__' == __name__:
         else:
             _usage()
             sys.exit(1)
-            
+
     sock_v5_server = SockV5Server(lhost, lport)
     sock_v5_server.serve_forever()
     sys.exit(0)
