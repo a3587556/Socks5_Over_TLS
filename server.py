@@ -57,24 +57,18 @@ class SockV5Server(object):
     def deciper_msg(self, msg):
         decipher = SodiumAeadCrypto('chacha20-ietf-poly1305',
                                      b'k' * 32, b'i' * 32, 0)
-        de_msg = decipher.decrypt_once(msg)
-        return de_msg
+        try:
+            de_msg =  decipher.decrypt_once(msg)
+            return de_msg
+        except Exception:
+            print 'Decrypt data failed'
+            return ''
 
     def ciper_msg(self, msg):
         cipher = SodiumAeadCrypto('chacha20-ietf-poly1305',
                                   b'k' * 32, b'i' * 32, 1)
         data = cipher.encrypt_once(msg)
         return data
-
-    def recv_all_data(self,sock):
-        encry_data = []
-        while True:
-            temp_date = sock.recv(BUFFER)
-            if temp_date == '':
-                break
-            else:
-                encry_data.append(temp_date)
-        return ''.join(encry_data)
 
     def process_sock_request(self, client_sock):
         recv = client_sock.recv(BUFFER)
@@ -143,14 +137,14 @@ class SockV5Server(object):
                 recv_len += len(msg)
 
             msg = self.deciper_msg(self.msg_recv_buff)
+            if len(msg) > 0:
+                send_sock.sendall(msg)
         else:
             msg = self.ciper_msg(recv)
             msg_len = len(msg)
             msg_len_hex = self.msg_len_to_hex_string(msg_len)
             msg = msg_len_hex + msg
-
-
-        send_sock.sendall(msg)
+            send_sock.sendall(msg)
 
     def msg_len_to_hex_string(self, int_port):
         port_hex_string = chr(int_port / 256) + chr(int_port % 256)
