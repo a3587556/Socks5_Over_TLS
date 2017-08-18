@@ -18,7 +18,6 @@ RSV = 0
 ATYP_IP_V4 = 1
 ATYP_DOMAINNAME = 3
 CMD_CONNECT = 1
-CMD_UDP_ASSOCIATE = 3
 IMPLEMENTED_METHODS = (2, 0)
 
 
@@ -107,8 +106,12 @@ class SockV5Server(object):
     def deciper_msg(self, msg):
         decipher = SodiumAeadCrypto('chacha20-ietf-poly1305',
                                      b'k' * 32, b'i' * 32, 0)
-        de_msg =  decipher.decrypt_once(msg)
-        return de_msg
+        try:
+            de_msg =  decipher.decrypt_once(msg)
+            return de_msg
+        except Exception:
+            print 'Decrypt data failed'
+            return ''
 
     def connect_target_server_and_reply(self, client_sock, send_buff):
         ssl_server_sock = self.get_ssl_server_sock()
@@ -167,13 +170,15 @@ class SockV5Server(object):
                 recv_len += len(msg)
 
             msg = self.deciper_msg(self.msg_recv_buff)
+            if len(msg) > 0:
+                send_sock.sendall(msg)
         else:
             msg = self.ciper_msg(recv)
             msg_len = len(msg)
             msg_len_hex = self.msg_len_to_hex_string(msg_len)
             msg = msg_len_hex + msg
-
-        send_sock.sendall(msg)
+            send_sock.sendall(msg)
+        
 
     def msg_len_to_hex_string(self, int_port):
         port_hex_string = chr(int_port / 256) + chr(int_port % 256)
