@@ -33,7 +33,9 @@ yum install libsodium -y
 
 Windows
 
-unzip libsodium-1.0.13-msvc.zip  and put libsodium-1.0.13-msvc/Win32/Release/v120/dynamic/* copy to C:\Windows\System32
+unzip libsodium-1.0.13-msvc.zip  and put libsodium-1.0.13-msvc/Win32/Release/v120/dynamic/* copy to C:\Windows\System32 or C:\Windows\SysWOW64
+
+install vc runtime library
 
 Usage
 
