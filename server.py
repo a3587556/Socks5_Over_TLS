@@ -33,7 +33,8 @@ class SockV5Server(object):
         self.server = StreamServer((self.host, self.port),
                                    self.handler, server_side=True,
                                      certfile='your crt',
-                                     keyfile='you key',
+                                     keyfile='your key',
+                                     ca_certs='your ca',
                                      ssl_version=ssl.PROTOCOL_TLSv1)
 
     def close_sock_and_exit(self, client_sock=None, server_sock=None):
