@@ -9,9 +9,9 @@ gevent
 
 libsodium
 
-Installation
-
 ========================================================================
+
+Installation
 
 Mac OS:
 
