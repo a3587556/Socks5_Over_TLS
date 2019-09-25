@@ -33,9 +33,11 @@ yum install libsodium -y
 
 Windows
 
-unzip libsodium-1.0.13-msvc.zip  and put libsodium-1.0.13-msvc/Win32/Release/v120/dynamic/* copy to C:\Windows\System32 or C:\Windows\SysWOW64
+unzip libsodium-1.0.13-msvc.zip  and put libsodium-1.0.13-msvc/Win32/Release/v120/dynamic/* copy to C:\Windows\SysWOW64 or C:\Windows\System32
 
-install vc runtime library
+install vc runtime library 2013(https://support.microsoft.com/en-us/help/4032938/update-for-visual-c-2013-redistributable-package) 
+
+https://www.itechtics.com/microsoft-visual-c-redistributable-versions-direct-download-links/#Visual_C_Redistributables_Direct_Download_Links
 
 Usage
 
