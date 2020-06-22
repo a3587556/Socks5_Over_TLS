@@ -93,7 +93,7 @@ class SockV5Server(object):
         ctx.verify_mode = ssl.CERT_REQUIRED
         ctx.check_hostname = True
         ctx.load_default_certs()
-        ssl_server_sock = ctx.wrap_socket(server_sock,server_hostname='your cert domain name')
+        ssl_server_sock = ctx.wrap_socket(server_sock,server_hostname=dhost) # dhost is your cert domain name
 
         return ssl_server_sock
 
