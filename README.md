@@ -19,6 +19,8 @@ pip install gevent
 
 brew install libsodium
 
+========================================================================
+
 Debian/Ubuntu:
 
 pip install gevent
