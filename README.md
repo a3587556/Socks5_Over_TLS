@@ -5,6 +5,8 @@ Dependencies
 
 python 2.6 - 2.x
 
+pip >= 20.x
+
 gevent
 
 libsodium
