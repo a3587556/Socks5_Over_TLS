@@ -63,9 +63,19 @@ unzip libsodium-1.0.13-msvc.zip  and put libsodium-1.0.13-msvc/x64/Release/v120/
 
 Usage
 
+server:
+
+modify the path of certfile and keyfile in server.py
+
+server.py l:0.0.0.0:443
+
+------------------------------------------------------------------------
+
 linux:
 
 client.py -l:port -c:host:port
+
+------------------------------------------------------------------------
 
 Windows:
 
