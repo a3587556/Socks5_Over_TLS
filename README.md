@@ -75,10 +75,10 @@ server.py l:0.0.0.0:443
 
 linux:
 
-client.py -l:port -c:host:port
+client.py l:port c:host:port
 
 ------------------------------------------------------------------------
 
 Windows:
 
-client.exe -l:port -c:host:port
+client.exe l:port c:host:port
