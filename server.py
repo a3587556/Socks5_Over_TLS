@@ -35,7 +35,7 @@ class SockV5Server(object):
                                      certfile='your crt',
                                      keyfile='your key',
                                      ca_certs='your ca',
-                                     ssl_version=ssl.PROTOCOL_TLSv1)
+                                     ssl_version=ssl.PROTOCOL_TLSv1_2)
 
     def close_sock_and_exit(self, client_sock=None, server_sock=None):
         if client_sock:
