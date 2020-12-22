@@ -89,7 +89,7 @@ class SockV5Server(object):
 
     def get_ssl_server_sock(self):
         server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         ctx.verify_mode = ssl.CERT_REQUIRED
         ctx.check_hostname = True
         ctx.load_default_certs()
