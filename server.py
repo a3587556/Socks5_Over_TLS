@@ -19,6 +19,8 @@ ATYP_IP_V4 = 1
 ATYP_DOMAINNAME = 3
 CMD_CONNECT = 1
 IMPLEMENTED_METHODS = (2, 0)
+IPV4_ADDR = 2
+IPV6_ADDR = 10
 
 def _usage():
     print '''Usage: ./server.py l:port
@@ -32,9 +34,9 @@ class SockV5Server(object):
         self.pool = Pool(1000)
         self.server = StreamServer((self.host, self.port),
                                    self.handler, server_side=True,
-                                     certfile='your crt',
-                                     keyfile='your key',
-                                     ca_certs='your ca',
+                                     certfile='/etc/letsencrypt/live/us3.mbks.club/fullchain.pem',
+                                     keyfile='/etc/letsencrypt/live/us3.mbks.club/privkey.pem',
+                                     #ca_certs='your ca',
                                      ssl_version=ssl.PROTOCOL_TLSv1_2)
 
     def close_sock_and_exit(self, client_sock=None, server_sock=None):
@@ -80,21 +82,28 @@ class SockV5Server(object):
                 addr = socket.inet_ntoa(recv[1:5])
             elif addr_type == ATYP_DOMAINNAME:
                 addr_len = ord(recv[1])
-                addr = socket.gethostbyname(recv[2:2 + addr_len])
+                #addr = socket.gethostbyname(recv[2:2 + addr_len])
+                addr_info = socket.getaddrinfo(recv[2:2 + addr_len], None)[0]
+                addr_type = addr_info[0]
+                addr = addr_info[4][0]
             else:
                 print 'exit'
-                # only ipv4 addr or domain name is supported.
+                # only ipv4 addr, ipv4 and ipv6 domain name is supported.
                 self.close_sock_and_exit(client_sock)
             port = ord(recv[-2]) * 256 + ord(recv[-1])
             return self.connect_target_server_and_reply(client_sock,
-                                                                   addr, port)
+                                                                   addr, port, addr_type)
         else:
             self.close_sock_and_exit(client_sock)
 
-    def connect_target_server_and_reply(self, client_sock, addr, port):
-        server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            server_sock.connect((addr, port))
+    def connect_target_server_and_reply(self, client_sock, addr, port, addr_type=IPV4_ADDR):
+        try:    
+            if addr_type == IPV4_ADDR:
+                server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server_sock.connect((addr, port))
+            elif addr_type == IPV6_ADDR:
+                server_sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+                server_sock.connect((addr, port, 0, 0))
             send_msg = self.ciper_msg('\x0a\x18')
             client_sock.sendall(send_msg)
         except Exception:
