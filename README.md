@@ -25,6 +25,8 @@ brew install libsodium
 
 Debian/Ubuntu:
 
+apt-get install python-dev
+
 pip install gevent
 
 apt-get install libsodium-dev -y
@@ -32,6 +34,8 @@ apt-get install libsodium-dev -y
 ========================================================================
 
 CentOS:
+
+apt-get install python-devel
 
 pip install gevent
 
